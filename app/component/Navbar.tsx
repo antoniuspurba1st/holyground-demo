@@ -17,6 +17,9 @@ export default function Navbar() {
 
         {/* DESKTOP MENU */}
         <div className="hidden md:flex items-center gap-8">
+          <Link href="/" className="hover:text-gray-300 transition">
+            Home
+          </Link>
           <Link href="/bible" className="hover:text-gray-300 transition">
             Bible
           </Link>
@@ -48,6 +51,9 @@ export default function Navbar() {
       {open && (
         <div className="md:hidden bg-black border-t border-white/10">
           <div className="flex flex-col px-6 py-4 gap-4">
+            <Link href="/" onClick={()=>setOpen(false)}>
+              Home
+            </Link>
             <Link href="/bible" onClick={()=>setOpen(false)}>
               Bible
             </Link>
