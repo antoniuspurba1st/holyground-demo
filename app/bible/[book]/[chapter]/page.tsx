@@ -1,3 +1,5 @@
+import { getBookBySlug } from "../../../lib/bibleBooks";
+
 type Verse = {
   verse: number;
   text: string;
@@ -10,10 +12,10 @@ type BibleResponse = {
 
 async function getBible(book: string, chapter: string): Promise<BibleResponse | null> {
   try {
-    const res = await fetch(
-      `https://bible-api.com/${book}+${chapter}`,
-      { cache: "no-store" }
-    );
+    const reference = encodeURIComponent(`${book} ${chapter}`);
+    const res = await fetch(`https://bible-api.com/${reference}`, {
+      cache: "no-store",
+    });
 
     if (!res.ok) return null;
 
@@ -33,9 +35,10 @@ export default async function BiblePage({
 }: {
   params: Promise<{ book: string; chapter: string }>;
 }) {
-  const { book, chapter } = await params;
-
-  const data = await getBible(book, chapter);
+  const { book: rawBook, chapter } = await params;
+  const decodedBook = decodeURIComponent(rawBook);
+  const resolvedBook = getBookBySlug(decodedBook)?.name ?? decodedBook;
+  const data = await getBible(resolvedBook, chapter);
 
   if (!data) {
     return (
